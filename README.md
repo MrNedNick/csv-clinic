@@ -1,3 +1,9 @@
+## Requirements
+
+Node `^22.12.0` or newer (`vitest` 5 needs `require(esm)` support that Node 20.x
+doesn't have — `npm run dev`/`build` tolerate older Node with a warning, but
+`npm test` fails outright on it).
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
