@@ -1,7 +1,9 @@
+import { ImportPanel } from './features/01-import/ImportPanel'
+
 function App() {
   return (
-    <main className="flex min-h-svh items-center justify-center">
-      <p className="text-slate-500">csv-clinic — work in progress.</p>
+    <main className="min-h-svh bg-white dark:bg-slate-950">
+      <ImportPanel />
     </main>
   )
 }
