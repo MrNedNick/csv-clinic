@@ -1,11 +1,14 @@
-import type { ChangeEvent } from 'react'
+import type { ChangeEvent, ReactNode } from 'react'
+import type { Dataset } from '../../domain/01-import/types'
+import { SAMPLE, SAMPLE_NAME } from '../../sample'
 import { previewRows } from '../../domain/01-import/parse-csv'
 import { describeError } from './describe-error'
 import { useImportedDataset } from './use-imported-dataset'
 
 const PREVIEW_LIMIT = 10
 
-export function ImportPanel() {
+/** `children` renders under the preview once a file is loaded — the clean-up workbench in the app. */
+export function ImportPanel({ children }: { children?: (dataset: Dataset) => ReactNode } = {}) {
   const { state, importFile, reset } = useImportedDataset()
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -15,9 +18,15 @@ export function ImportPanel() {
   }
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-4 p-6">
+    <div className="mx-auto flex max-w-6xl flex-col gap-4 p-4 sm:p-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">csv-clinic</h1>
+        <div>
+          <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">csv-clinic</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            Open a CSV, see what is wrong with it, fix it with a recipe and download a clean file. It all runs in this
+            browser; the file is not uploaded anywhere.
+          </p>
+        </div>
         <label className="cursor-pointer rounded-md bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white">
           Open CSV
           <input
@@ -31,9 +40,16 @@ export function ImportPanel() {
       </div>
 
       {state.status === 'empty' && (
-        <p className="rounded-md border border-dashed border-slate-300 p-8 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
-          No file loaded yet. Open a CSV to see a preview.
-        </p>
+        <div className="flex flex-col items-center gap-3 rounded-md border border-dashed border-slate-300 p-8 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
+          <p>No file loaded yet. Open a CSV to see a preview.</p>
+          <button
+            type="button"
+            onClick={() => importFile(new File([SAMPLE], SAMPLE_NAME, { type: 'text/csv' }))}
+            className="rounded-md border border-slate-300 px-3 py-1.5 text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+          >
+            Try a messy sample file
+          </button>
+        </div>
       )}
 
       {state.status === 'loading' && (
@@ -100,9 +116,10 @@ export function ImportPanel() {
           </div>
           {state.dataset.rowCount > PREVIEW_LIMIT && (
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Showing the first {PREVIEW_LIMIT} of {state.dataset.rowCount} rows.
+              Showing the first {PREVIEW_LIMIT} of {state.dataset.rowCount} rows of the original file.
             </p>
           )}
+          {children?.(state.dataset)}
         </>
       )}
     </div>
