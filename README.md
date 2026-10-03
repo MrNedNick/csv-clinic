@@ -2,6 +2,8 @@
 
 Open a messy CSV, see what is wrong with it, fix it with a recipe, and download a clean file with a report of every change. Everything runs in the browser — the file is never uploaded.
 
+**[Try it live](https://mrnednick.github.io/csv-clinic/)** — press **Try a messy sample file** and go from a broken CSV to a clean download in a minute. The first open fetches the DuckDB engine (about 8 MB compressed) from the same site.
+
 ![A sample file after two recipe steps: suggested fixes, the column profile with a value that is not a number, and the recipe with row counts](docs/screenshot.png)
 
 ## What it does
